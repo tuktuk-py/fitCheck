@@ -100,6 +100,7 @@ echo "<a href='edit.php?Id=$res_id'>Change Profile</a>";
             </div>
 </main>
 <?php 
+$user_id = $_SESSION['id'];
 
 if(isset($_POST["submit"])){
     $errors=array();
@@ -126,19 +127,24 @@ if(isset($_POST["submit"])){
         $photo = mysqli_real_escape_string($con, $_FILES['photo']['name']); // Get the filename
         $notes = mysqli_real_escape_string($con, $_POST['notes']);
 
-        // Move the uploaded file from temporary directory to desired location
-        $target_directory = "/clothing"; // Specify the target directory
-        $target_file = $target_directory . basename($_FILES["photo"]["name"]);
+        // Create the target directory if it doesn't exist
+        $target_directory = __DIR__ . '/clothing';
+        if (!file_exists($target_directory)) {
+            mkdir($target_directory, 0777, true);
+        }
+
+        // Move the uploaded file from temporary directory to target directory
+        $target_file = $target_directory . '/' . basename($_FILES["photo"]["name"]);
         if(move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)){
             // File uploaded successfully, now insert data into database
-            $sql = "INSERT INTO items(photo, nameClothing, kind, color, notes) VALUES ('$photo', '$nameClothing', '$kind', '$color', '$notes')";
+            $sql = "INSERT INTO items(photo, nameClothing, kind, color, notes, id) VALUES ('$photo', '$nameClothing', '$kind', '$color', '$notes','$user_id')";
             
             if(mysqli_query($con, $sql)){
-                echo "<div class='message'>
+                echo "<br> <br> <div class='message'>
                               <p>This item has been added to your closet successfully!</p>
                           </div> <br>";
-                echo "<a href='add.php'><button class='btn'>Add another one? </button></a>";
-                echo "<a href='home.php'><button class='btn'> Home </button></a>";
+                echo "<center> <align= 'left'> <a href='add.php'><button class='btn'>Add another one? </button></a>";
+                echo "<center> <right> <a href='home.php'><button class='btn'> Home </button></a>";
             } else {
                 echo 'Query error: ' . mysqli_error($con);
             }
@@ -161,7 +167,7 @@ if(isset($_POST["submit"])){
                     echo "Missing a temporary folder. Check your upload_tmp_dir directive in php.ini.";
                     break;
                 case UPLOAD_ERR_CANT_WRITE:
-                    echo "Failed to write file to disk. Check permissions for the upload directory.";
+                    echo "Failed to write file to disk.";
                     break;
                 case UPLOAD_ERR_EXTENSION:
                     echo "A PHP extension stopped the file upload.";
@@ -169,9 +175,9 @@ if(isset($_POST["submit"])){
                 default:
                     echo "Unknown file upload error.";
                     break;
+                }
             }
         }
-}
-}
-?>
-
+    }
+    ?>
+   
