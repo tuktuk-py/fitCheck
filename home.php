@@ -15,11 +15,7 @@
     <link rel="stylesheet" href="style/style.css">
     <title>Home</title>
 </head>
-<body>
-    <div class="nav">
-        <div class="logo">
-    <p><a href="home.php"><img align="left" src='fit.png' alt="logo" class="logo" height="100" width="100" ></a> </p>
-        </div>
+<?php include('header.php');?>
 
         <div class="right-links">
 
@@ -47,15 +43,16 @@
        <div class="main-box top">
           <div class="top">
             <div class="box">
-                <p>Hello <b><?php echo $res_Uname ?></b>, Welcome</p>
+                <p>Hello <b><?php echo $res_Uname ?></b>, Welcome to your virtual closet!</p>
             </div>
             <div class="box">
-                <p>Your email is <b><?php echo $res_Email ?></b>.</p>
+                <p>You have <b><?php echo $res_Email ?></b> in your closet.</p>
             </div>
           </div>
           <div class="bottom">
             <div class="box">
-                <p>And you are <b><?php echo $res_Age ?> years old</b>.</p> 
+                <p>You have <b><?php echo $res_Age ?> saved outfits</b>.</p> 
+                
             </div>
           </div>
        </div>

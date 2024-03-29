@@ -80,10 +80,11 @@ body{
     justify-content: space-around;
     line-height: 60px;
     z-index: 100;
+ 
 }
 .logo{
-    width:100px;
-    float: left;
+    font-size: 100px;
+    font-weight: left;
     
 }
 .logo a{
@@ -135,9 +136,3 @@ main{
     margin-bottom: 10px;
     color: red;
 }
-
-
-  .lets-get-some {
-    position: relative;
-    line-height: 24px;
-  }
