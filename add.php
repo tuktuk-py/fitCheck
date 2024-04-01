@@ -100,6 +100,21 @@ echo "<a href='edit.php?Id=$res_id'>Change Profile</a>";
             </div>
 </main>
 <?php 
+
+function convert_heic_to_png($heic_file_path, $output_file_path) {
+    // Use heic2any command to convert HEIC to PNG
+    $command = "/usr/local/bin/heic2any \"$heic_file_path\" \"$output_file_path\"";
+    exec($command, $output, $return_var);
+    
+    // Check if conversion was successful
+    if ($return_var === 0) {
+        return true; // Conversion successful
+    } else {
+        return false; // Conversion failed
+    }
+}
+
+
 $user_id = $_SESSION['id'];
 
 if(isset($_POST["submit"])){
@@ -124,7 +139,6 @@ if(isset($_POST["submit"])){
             echo $error . "<br>";
         }
     }else {
-        $photo = mysqli_real_escape_string($con, $_FILES['photo']['name']); // Get the filename
         $notes = mysqli_real_escape_string($con, $_POST['notes']);
 
         // Create the target directory if it doesn't exist
@@ -133,20 +147,36 @@ if(isset($_POST["submit"])){
             mkdir($target_directory, 0777, true);
         }
 
-        // Move the uploaded file from temporary directory to target directory
-        $target_file = $target_directory . '/' . basename($_FILES["photo"]["name"]);
-        if(move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)){
-            // File uploaded successfully, now insert data into database
-            $sql = "INSERT INTO items(photo, nameClothing, kind, color, notes, id) VALUES ('$photo', '$nameClothing', '$kind', '$color', '$notes','$user_id')";
+        // Handle file upload and conversion
+        if ($_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $photo_tmp_name = $_FILES["photo"]["tmp_name"];
+            $photo_extension = pathinfo($_FILES["photo"]["name"], PATHINFO_EXTENSION);
+            $photo_name = uniqid() . "." . $photo_extension; // Generate a unique name for the file
             
-            if(mysqli_query($con, $sql)){
-                echo "<br> <br> <div class='message'>
-                              <p>This item has been added to your closet successfully!</p>
-                          </div> <br>";
-                echo "<center> <align= 'left'> <a href='add.php'><button class='btn'>Add another one? </button></a>";
-                echo "<center> <right> <a href='home.php'><button class='btn'> Home </button></a>";
+            // Convert HEIC to PNG
+            if ($photo_extension === 'heic') {
+                $converted_photo_name = uniqid().".jpeg";
+                $converted_photo_path = $target_directory . '/' . $converted_photo_name;
+                convert_heic_to_png($photo_tmp_name, $converted_photo_path);
+                $photo_name = $converted_photo_name; // Use the converted PNG file
+            }
+            
+            // Move the uploaded file to target directory
+            $target_file = $target_directory . '/' . $photo_name;
+            if(move_uploaded_file($photo_tmp_name, $target_file)){
+                // File uploaded successfully, now insert data into database
+                $sql = "INSERT INTO items(photo, nameClothing, kind, color, notes, id) VALUES ('$photo_name', '$nameClothing', '$kind', '$color', '$notes','$user_id')";
+                
+                if(mysqli_query($con, $sql)){
+                    echo "<br> <br> <div class='message'>
+                                <p>This item has been added to your closet successfully!</p>
+                            </div> <br>";
+                    echo "<center> <right> <a href='home.php'><button class='btn'> Home </button></a>";
+                } else {
+                    echo 'Query error: ' . mysqli_error($con);
+                }
             } else {
-                echo 'Query error: ' . mysqli_error($con);
+                echo "Failed to move the uploaded file.";
             }
         } else {
             // Echo a more descriptive error message
@@ -175,9 +205,7 @@ if(isset($_POST["submit"])){
                 default:
                     echo "Unknown file upload error.";
                     break;
-                }
             }
         }
     }
-    ?>
-   
+}

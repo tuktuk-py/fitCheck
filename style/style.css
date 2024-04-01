@@ -136,3 +136,8 @@ main{
     margin-bottom: 10px;
     color: red;
 }
+
+.image-size {
+    width: 300px;
+    height:auto;
+}
