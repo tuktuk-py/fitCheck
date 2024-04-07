@@ -6,16 +6,18 @@
     font-family: 'Poppins',sans-serif;
 }
 body{
-    background: #e4e9f7;
+    background: rgba(118, 129, 167);
 }
 .container{
+    background: rgba(193, 198, 215);
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 90vh;
+    
 }
 .box{
-    background: #fdfdfd;
+    background: rgba(168, 175, 199);
     display: flex;
     flex-direction: column;
     padding: 25px 25px;
@@ -51,7 +53,7 @@ body{
 }
 .btn{
     height: 35px;
-    background: rgba(76,68,182,0.808);
+    background: rgba(48, 54, 75);
     border: 0;
     border-radius: 5px;
     color: #fff;
@@ -74,7 +76,7 @@ body{
 /********* Home *****************/
 
 .nav{
-    background: #fff;
+    background: rgba(118, 129, 167);
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -138,6 +140,47 @@ main{
 }
 
 .image-size {
-    width: 300px;
+    width: 100%;
     height:auto;
 }
+
+.item-container {
+    display: flex; /* Use flexbox layout */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if there's not enough space */
+    justify-content: space-between; /* Distribute items evenly with space in between */
+}
+
+.item {
+    width: calc(33.33% - 10px); /* Set width to one-third of the container width minus margin */
+    border: 2px solid; /* Add a solid border around each item */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    margin-bottom: 10px; /* Add some bottom margin to create space between items */
+}
+
+/* Define styles for each item position */
+.item:nth-child(odd) {
+    margin-right: auto; /* Push items to the left */
+}
+
+.item:nth-child(even) {
+    margin-left: auto; /* Push items to the right */
+}
+
+.item:nth-child(3n+2) {
+    margin: 0 auto; /* Center the second item */
+}
+/* CSS for details pop-up */
+.details-popup {
+    display: none; /* Hide the details pop-up by default */
+    position: absolute;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.item:hover .details-popup {
+    display: block; /* Display details pop-up when hovering over the item */
+}
+

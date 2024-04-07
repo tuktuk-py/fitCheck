@@ -65,23 +65,38 @@ echo "<a href='edit.php?Id=$res_id'>Change Profile</a>";
                 <br> <br>
         <h2>Your Items:</h2>
         <br> <br>
-        <?php
-        // Loop through each item to display its details
-        while ($row = mysqli_fetch_assoc($item_query)) {
-             // Construct the path to the image using the directory and filename
-             $image_path = "clothing/" . $row['photo'];
+        <div class="container">
+            
+    <?php
+    $count = 0;
+    while ($row = mysqli_fetch_assoc($item_query)) {
+        // Construct the path to the image using the directory and filename
+        $image_path = "clothing/" . $row['photo'];
 
-             // Display the image using the img tag
-            echo "<img src='" . $image_path."' alt='" . $row['nameClothing'] . "' class='image-size'>";
-   
-            // Display other details of the item
-            echo "<p>Name: " . $row['nameClothing'] . "</p>";
-            echo "<p>Kind: " . $row['kind'] . "</p>";
-            echo "<p>Color: " . $row['color'] . "</p>";
-            echo "<p>Notes: " . $row['notes'] . "</p>";
+        // Display the image using the img tag
+        echo "<div class='item'>";
+        echo "<img src='" . $image_path."' alt='" . $row['nameClothing'] . "' class='image-size'>";
+        
+        // Display other details of the item using popup
+        echo "<div class='details-popup'>";
+        echo "<p>Name: " . $row['nameClothing'] . "</p>";
+        echo "<p>Kind: " . $row['kind'] . "</p>";
+        echo "<p>Color: " . $row['color'] . "</p>";
+        echo "<p>Notes: " . $row['notes'] . "</p>";
+        echo "</div>";
+        echo "</div>";
 
+        // Increase count
+        $count++;
+
+        // Check if three items have been displayed
+        if ($count % 3 == 0) {
+            echo "</div><div class='container'>";
         }
-        ?>
+    }
+    ?>
+</div>
+
     </div>
 
 </main>
