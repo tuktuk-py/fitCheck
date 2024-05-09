@@ -1,11 +1,11 @@
 <?php 
-   session_start();
+session_start();
 
-   include("php/config.php");
-   if(!isset($_SESSION['valid'])){
+include("php/config.php");
+if(!isset($_SESSION['valid'])){
     header("Location: index.php");
     exit();
-   }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,80 +40,67 @@ echo "<a href='edit.php?Id=$res_id'>Change Profile</a>";
 </div>
 <main>
 <div class="box">
-            <p>Hello <b><?php echo $res_Uname ?></b>, Welcome to your virtual closet!</p>
-             <p>Let's add an item into your closet!</p>
-            <FORM action="add.php" method="post" name="form" enctype="multipart/form-data">
-                <table align="center" class="backgrounds" width="100%" border="2" cellpadding="1" cellspacing="8">
-                    <tr>
-                        <td width="100%">Upload a photo of your item </td>
-                        <td> <input type="file" name="photo" size="25" class="textfield"> </td>
-                    </tr>            
-                    <tr>
-                    <td> Name of the clothing: </td>
-                    <td> <input type="text" name="nameClothing" Class="shadeform"></td>
-                    </tr>
-                    <tr>
-                        <td> What kind of clothing is this? </td>
-                        <td><select name ="kind">
-                            <option value="shirt"> Shirt
-                            <option value="shortSleeve"> Short Sleeve
-                            <option value="longSleeve"> Long Sleeve
-                            <option value="shorts"> Shorts
-                            <option value="pants"> Pants
-                            <option value="dress"> Dress
-                            <option value="jacket"> Jacket
-                            <option value="skirt"> Skirt
-                            <option value="shoes"> Shoes
-                            <option value="accessories"> Accessories 
-                        </select></td>
-                    </tr>
-                    <tr>
-                        <td> Color </td>
-                        <td><select name ="color">
-                            <option value="red"> Red
-                            <option value="blue"> Blue
-                            <option value="green"> Green
-                            <option value="yellow"> Yellow
-                            <option value="black"> Black
-                            <option value="white"> White
-                            <option value="gray"> Gray
-                            <option value="brown"> Brown
-                            <option value="purple"> Purple
-                            <option value="orange"> Orange
-                            <option value="pink"> Pink 
-                        </select></td>
-                    </tr>
-                    <tr>
-                        <td> Notes: </td>
-                        <td> <textarea name="notes" rows="5" cols="40" wrap="physical" placeholder="How does it fit you? What is the material? Where are you storing it? Which season is it for?"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div align="center">
-                                <input type="submit" name="submit" value="  Add this item to your closet!  "/>
-                             
-                            </div>
-                        </td>
-                    </tr>
-</table>
-            </FORM>
-            </div>
+    <p>Hello <b><?php echo $res_Uname ?></b>, Welcome to your virtual closet!</p>
+    <p>Let's add an item into your closet!</p>
+    <form action="add.php" method="post" name="form" enctype="multipart/form-data">
+        <table align="center" class="backgrounds" width="100%" border="2" cellpadding="1" cellspacing="8">
+            <tr>
+                <td width="100%">Upload a photo of your item </td>
+                <td> <input type="file" name="photo" size="25" class="textfield"> </td>
+            </tr>            
+            <tr>
+                <td> Name of the clothing: </td>
+                <td> <input type="text" name="nameClothing" class="shadeform"></td>
+            </tr>
+            <tr>
+                <td> What kind of clothing is this? </td>
+                <td><select name="kind">
+                    <option value="shirt"> Shirt </option>
+                    <option value="shortSleeve"> Short Sleeve </option>
+                    <option value="longSleeve"> Long Sleeve </option>
+                    <option value="shorts"> Shorts </option>
+                    <option value="pants"> Pants </option>
+                    <option value="dress"> Dress </option>
+                    <option value="jacket"> Jacket </option>
+                    <option value="skirt"> Skirt </option>
+                    <option value="shoes"> Shoes </option>
+                    <option value="accessories"> Accessories </option>
+                </select></td>
+            </tr>
+            <tr>
+                <td> Color </td>
+                <td><select name="color">
+                    <option value="red"> Red </option>
+                    <option value="blue"> Blue </option>
+                    <option value="green"> Green </option>
+                    <option value="yellow"> Yellow </option>
+                    <option value="black"> Black </option>
+                    <option value="white"> White </option>
+                    <option value="gray"> Gray </option>
+                    <option value="brown"> Brown </option>
+                    <option value="purple"> Purple </option>
+                    <option value="orange"> Orange </option>
+                    <option value="pink"> Pink </option>
+                </select></td>
+            </tr>
+            <tr>
+                <td> Notes: </td>
+                <td> <textarea name="notes" rows="5" cols="40" wrap="physical" placeholder="How does it fit you? What is the material? Where are you storing it? Which season is it for?"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div align="center">
+                        <input type="submit" name="submit" value="  Add this item to your closet!  "/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 </main>
+</body>
+</html>
 <?php 
-
-function convert_heic_to_png($heic_file_path, $output_file_path) {
-    // Use heic2any command to convert HEIC to PNG
-    $command = "/usr/local/bin/heic2any \"$heic_file_path\" \"$output_file_path\"";
-    exec($command, $output, $return_var);
-    
-    // Check if conversion was successful
-    if ($return_var === 0) {
-        return true; // Conversion successful
-    } else {
-        return false; // Conversion failed
-    }
-}
-
 
 $user_id = $_SESSION['id'];
 
@@ -152,14 +139,6 @@ if(isset($_POST["submit"])){
             $photo_tmp_name = $_FILES["photo"]["tmp_name"];
             $photo_extension = pathinfo($_FILES["photo"]["name"], PATHINFO_EXTENSION);
             $photo_name = uniqid() . "." . $photo_extension; // Generate a unique name for the file
-            
-            // Convert HEIC to PNG
-            if ($photo_extension === 'heic') {
-                $converted_photo_name = uniqid().".jpeg";
-                $converted_photo_path = $target_directory . '/' . $converted_photo_name;
-                convert_heic_to_png($photo_tmp_name, $converted_photo_path);
-                $photo_name = $converted_photo_name; // Use the converted PNG file
-            }
             
             // Move the uploaded file to target directory
             $target_file = $target_directory . '/' . $photo_name;
@@ -209,3 +188,4 @@ if(isset($_POST["submit"])){
         }
     }
 }
+?>
