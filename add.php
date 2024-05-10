@@ -81,6 +81,7 @@ echo "<a href='edit.php?Id=$res_id'>Change Profile</a>";
                     <option value="purple"> Purple </option>
                     <option value="orange"> Orange </option>
                     <option value="pink"> Pink </option>
+                    <option value="others"> Others </option>
                 </select></td>
             </tr>
             <tr>
