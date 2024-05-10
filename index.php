@@ -33,20 +33,17 @@
                     $_SESSION['username'] = $row['Username'];
                     $_SESSION['age'] = $row['Age'];
                     $_SESSION['id'] = $row['Id'];
-                }else{
-                    echo "<div class='message'>
-                      <p>Wrong Username or Password</p>
-                       </div> <br>";
-                   echo "<a href='index.php'><button class='btn'>Go Back</button>";
-         
-                }
-                if(isset($_SESSION['valid'])){
-                    header("Location: home.php");
-                }
-              }else{
-
-            
-            ?>
+              // Redirect to home.php
+        echo "<script>window.location.href='home.php';</script>";
+        exit();
+    } else {
+        // Display error message if login fails
+        $errorMessage = "<div class='message'>
+            <p>Wrong Username or Password</p>
+        </div> <br>";
+    }
+} 
+?>
             <header>Login</header>
             <form action="" method="post">
                 <div class="field input">
@@ -67,8 +64,8 @@
                     Don't have account? <a href="register.php">Sign Up Now</a>
                 </div>
             </form>
+            <?php if(isset($errorMessage)) echo $errorMessage; ?>
         </div>
-        <?php } ?>
       </div>
 </body>
 </html>

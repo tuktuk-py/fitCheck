@@ -4,22 +4,26 @@ services:
   php:
     build: .
     ports:
-      - "80:80"
+      - "8080:80"  # Changed port to 8080
     depends_on:
       - mysql
+    volumes:
+      - ./:/var/www/html
     networks:
-      - app-network
+      - my-network
 
   mysql:
     image: mysql:latest
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: outfitadmin123
       MYSQL_DATABASE: outfitt
     volumes:
-      - ./outfitt.sql:/docker-entrypoint-initdb.d/outfitt.sql
+      - ./outfitt.sql:/docker-entrypoint-initdb.d/outfitt.sql  # Mount the SQL dump file
     networks:
-      - app-network
+      - my-network
 
 networks:
-  app-network:
+  my-network:
     driver: bridge

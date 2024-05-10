@@ -7,6 +7,9 @@ RUN docker-php-ext-install mysqli
 # Copy your PHP application files into the container's /var/www/html directory
 COPY . /var/www/html
 
+# Change ownership of the /var/www/html directory
+RUN chown -R www-data:www-data /var/www/html
+
 # Expose port 80
 EXPOSE 80
 
