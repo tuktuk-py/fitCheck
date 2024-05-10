@@ -48,7 +48,7 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: 339712698487.dkr.ecr.us-east-2.amazonaws.com/fitcheck
+          ECR_REGISTRY: 339712698487.dkr.ecr.us-east-2.amazonaws.com
           ECR_REPOSITORY: fitcheck
           IMAGE_TAG: latest
         run: |
