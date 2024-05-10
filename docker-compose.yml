@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  php:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: outfitadmin123
+      MYSQL_DATABASE: outfitt
+    volumes:
+      - ./outfitt.sql:/docker-entrypoint-initdb.d/outfitt.sql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
